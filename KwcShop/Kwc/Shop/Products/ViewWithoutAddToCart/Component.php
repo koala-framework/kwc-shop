@@ -1,0 +1,4 @@
+<?php
+class KwcShop_Kwc_Shop_Products_ViewWithoutAddToCart_Component extends Kwc_Directories_List_ViewPage_Component
+{
+}
