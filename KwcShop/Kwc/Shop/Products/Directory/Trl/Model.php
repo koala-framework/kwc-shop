@@ -1,5 +1,5 @@
 <?php
 class KwcShop_Kwc_Shop_Products_Directory_Trl_Model extends Kwf_Model_Db_Proxy
 {
-    protected $_table = 'KwcShop_Kwc_Shop_products_trl';
+    protected $_table = 'kwc_shop_products_trl';
 }

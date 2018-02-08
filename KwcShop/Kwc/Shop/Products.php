@@ -2,7 +2,7 @@
 class KwcShop_Kwc_Shop_Products extends Kwf_Model_Db
 {
     protected $_rowClass = 'KwcShop_Kwc_Shop_Product';
-    protected $_table = 'KwcShop_Kwc_Shop_products';
+    protected $_table = 'kwc_shop_products';
     protected $_filters = array('pos');
     protected $_dependentModels = array(
         'Prices' => 'KwcShop_Kwc_Shop_ProductPrices'

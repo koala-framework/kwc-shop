@@ -1,7 +1,7 @@
 <?php
 class KwcShop_Kwc_Shop_ProductPrices extends Kwf_Model_Db
 {
-    protected $_table = 'KwcShop_Kwc_Shop_product_prices';
+    protected $_table = 'kwc_shop_product_prices';
     protected $_referenceMap = array(
         'Product' => array(
             'column'   => 'shop_product_id',

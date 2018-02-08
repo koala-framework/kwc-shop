@@ -2,7 +2,7 @@
 class KwcShop_Kwc_Shop_Category_Directory_ProductsToCategoriesModel
     extends Kwc_Directories_Category_Directory_ItemsToCategoriesModel
 {
-    protected $_table = 'KwcShop_Kwc_Shop_products_to_categories';
+    protected $_table = 'kwc_shop_products_to_categories';
 
     protected function _init()
     {

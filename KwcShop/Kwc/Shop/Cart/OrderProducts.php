@@ -2,7 +2,7 @@
 class KwcShop_Kwc_Shop_Cart_OrderProducts extends Kwf_Model_Db
 {
     protected $_rowClass = 'KwcShop_Kwc_Shop_Cart_OrderProduct';
-    protected $_table = 'KwcShop_Kwc_Shop_order_products';
+    protected $_table = 'kwc_shop_order_products';
     protected $_referenceMap = array(
         'Order' => array(
             'column'   => 'shop_order_id',

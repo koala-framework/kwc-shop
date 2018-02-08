@@ -1,7 +1,7 @@
 <?php
 class KwcShop_Kwc_Shop_Cart_Plugins_Voucher_Vouchers extends Kwf_Model_Db
 {
-    protected $_table = 'KwcShop_Kwc_Shop_vouchers';
+    protected $_table = 'kwc_shop_vouchers';
     protected $_dependentModels = array(
         'history' => 'KwcShop_Kwc_Shop_Cart_Plugins_Voucher_VoucherHistory'
     );

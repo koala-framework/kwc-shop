@@ -1,7 +1,7 @@
 <?php
 class KwcShop_Kwc_Shop_Cart_Orders extends Kwf_Model_Db
 {
-    protected $_table = 'KwcShop_Kwc_Shop_orders';
+    protected $_table = 'kwc_shop_orders';
     protected $_rowClass = 'KwcShop_Kwc_Shop_Cart_Order';
     protected $_siblingModels = array('KwcShop_Kwc_Shop_Cart_Checkout_Model');
     protected $_dependentModels = array('Products'=>'KwcShop_Kwc_Shop_Cart_OrderProducts');
