@@ -1,0 +1,14 @@
+{
+    "name": "koala-framework/kwc-shop",
+    "description": "Koala Framework Component for Shop",
+    "homepage": "http://www.koala-framework.org/",
+    "license": "BSD-2-Clause",
+    "type": "library",
+    "require": {
+        "koala-framework/koala-framework": "~5.0"
+    },
+    "require-dev": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
