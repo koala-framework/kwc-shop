@@ -10,5 +10,10 @@
     "require-dev": {
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "autoload": {
+        "psr-0": {
+            "Shop_": ""
+        }
+    }
 }
