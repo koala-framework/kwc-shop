@@ -4,6 +4,9 @@ class KwcShop_Kwc_Shop_Products_Directory_Update_20150423Shop00002 extends Kwf_U
     public function update()
     {
         $db = Kwf_Registry::get('db');
+        $executed = $db->fetchOne("SHOW columns FROM `kwc_wirecard_log` LIKE 'custom'");
+        if ($executed) return;
+
         $db->query('ALTER TABLE `kwc_wirecard_log` ADD `custom` varchar(255) NOT NULL');
         $db->query('ALTER TABLE `kwc_wirecard_log` ADD `callback_success` tinyint(1) NOT NULL');
 
@@ -23,6 +26,5 @@ class KwcShop_Kwc_Shop_Products_Directory_Update_20150423Shop00002 extends Kwf_U
 
         $db->query('ALTER TABLE `kwc_wirecard_log` DROP `custom_order_id`');
     }
-
 }
 
