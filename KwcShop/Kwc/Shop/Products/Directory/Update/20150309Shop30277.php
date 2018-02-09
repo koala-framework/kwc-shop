@@ -1,5 +1,5 @@
 <?php
-class KwcShop_Kwc_Shop_Cart_Checkout_Update_20150309Legacy30277 extends Kwf_Update
+class KwcShop_Kwc_Shop_Products_Directory_Update_20150309Shop30277 extends Kwf_Update
 {
     protected function _init()
     {
