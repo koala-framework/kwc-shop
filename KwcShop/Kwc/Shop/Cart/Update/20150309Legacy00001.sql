@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_orders` (
+CREATE TABLE IF NOT EXISTS `kwc_Shop_orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status` enum('cart','ordered','payed') NOT NULL,
   `ip` varchar(100) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_orders` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_order_products` (
+CREATE TABLE IF NOT EXISTS `kwc_shop_order_products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `shop_order_id` int(10) unsigned NOT NULL,
   `shop_product_price_id` int(10) unsigned DEFAULT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_order_products` (
   KEY `shop_product_price_id` (`shop_product_price_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_products` (
+CREATE TABLE IF NOT EXISTS `kwc_shop_products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(255) NOT NULL,
   `pos` smallint(6) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_products` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_product_prices` (
+CREATE TABLE IF NOT EXISTS `kwc_shop_product_prices` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `shop_product_id` int(10) unsigned NOT NULL,
   `price` decimal(10,2) NOT NULL,
@@ -57,12 +57,12 @@ CREATE TABLE IF NOT EXISTS `KwcShop_Kwc_Shop_product_prices` (
   KEY `shop_product_id` (`shop_product_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-ALTER TABLE `KwcShop_Kwc_Shop_order_products`
-  ADD CONSTRAINT `KwcShop_Kwc_Shop_order_products_ibfk_1` FOREIGN KEY (`shop_order_id`) REFERENCES `KwcShop_Kwc_Shop_orders` (`id`),
-  ADD CONSTRAINT `KwcShop_Kwc_Shop_order_products_ibfk_2` FOREIGN KEY (`shop_product_price_id`) REFERENCES `KwcShop_Kwc_Shop_product_prices` (`id`);
+ALTER TABLE `kwc_shop_order_products`
+  ADD CONSTRAINT `kwc_shop_order_products_ibfk_1` FOREIGN KEY (`shop_order_id`) REFERENCES `kwc_shop_orders` (`id`),
+  ADD CONSTRAINT `kwc_shop_order_products_ibfk_2` FOREIGN KEY (`shop_product_price_id`) REFERENCES `kwc_shop_product_prices` (`id`);
 
-ALTER TABLE `KwcShop_Kwc_Shop_product_prices`
-  ADD CONSTRAINT `KwcShop_Kwc_Shop_product_prices_ibfk_1` FOREIGN KEY (`shop_product_id`) REFERENCES `KwcShop_Kwc_Shop_products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `kwc_shop_product_prices`
+  ADD CONSTRAINT `kwc_shop_product_prices_ibfk_1` FOREIGN KEY (`shop_product_id`) REFERENCES `kwc_shop_products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
-ALTER TABLE `KwcShop_Kwc_Shop_order_products` CHANGE `shop_product_price_id` `shop_product_price_id` INT( 10 ) UNSIGNED NULL;
+ALTER TABLE `kwc_shop_order_products` CHANGE `shop_product_price_id` `shop_product_price_id` INT( 10 ) UNSIGNED NULL;
