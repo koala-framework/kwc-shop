@@ -17,6 +17,11 @@ class KwcShop_Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Comp
         if (isset($data[$this->getData()->componentId.'-delete'])) {
             $this->getData()->row->delete();
         }
+        // HACK: Should be delegated to AddToCartAbstract_Component which show the form
+        if (isset($data[$this->getData()->parent->componentId.'-form-update'])) {
+            $amount = $data['order'.$this->getData()->row->id.'_amount'];
+            $this->getData()->row->amount = $amount;
+        }
     }
 
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
