@@ -25,8 +25,13 @@ class KwcShop_Kwc_Shop_AddToCartAbstract_Trl_Component extends Kwc_Chained_Trl_C
 
     public final function getAdditionalOrderData(KwcShop_Kwc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return KwcShop_Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+        $ret = KwcShop_Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getAdditionalOrderData($orderProduct);
+        foreach ($ret as &$r) {
+            $r['name'] = $this->getData()->trlStaticExecute($r['name']);
+        }
+        return $ret;
+
     }
 
     public function getPrice(KwcShop_Kwc_Shop_Cart_OrderProduct $orderProduct)
