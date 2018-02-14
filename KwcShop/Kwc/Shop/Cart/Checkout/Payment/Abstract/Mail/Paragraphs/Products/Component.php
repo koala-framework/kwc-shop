@@ -16,6 +16,9 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_C
         if ($renderer && $renderer instanceof Kwf_Component_Renderer_Mail) {
             $order = $renderer->getRecipient();
             $ret['items'] = $order->getProductsData();
+            foreach ($ret['items'] as &$r) {
+                $r->additionalOrderData[0]['name'] = $this->getData()->trlStaticExecute($r->additionalOrderData[0]['name']);
+            }
 
             $c = $this->getData()->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Component');
             $ret['sumRows'] = $c->getComponent()->getSumRows($order);
