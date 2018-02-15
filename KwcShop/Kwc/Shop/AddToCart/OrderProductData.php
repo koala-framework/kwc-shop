@@ -34,9 +34,11 @@ class KwcShop_Kwc_Shop_AddToCart_OrderProductData extends KwcShop_Kwc_Shop_AddTo
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (is_instance_of($c, 'KwcShop_Kwc_Shop_Products_Directory_Component')) {
                 $detailClasses = Kwc_Abstract::getChildComponentClasses($c, 'detail');
-                foreach ($detailClasses as $key=>$class) {
-                    if (Kwc_Abstract::getChildComponentClass($class, 'addToCart') == $this->_class) {
-                        $component = $key;
+                if (count($detailClasses) > 1) {
+                    foreach ($detailClasses as $key=>$class) {
+                        if (Kwc_Abstract::getChildComponentClass($class, 'addToCart') == $this->_class) {
+                            $component = $key;
+                        }
                     }
                 }
             }
