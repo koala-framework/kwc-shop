@@ -6,7 +6,7 @@ class KwcShop_Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plug
     {
         $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Vouchers');
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Shop/Cart/Plugins/Voucher/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'kwcShop/KwcShop/Kwc/Shop/Cart/Plugins/Voucher/Panel.js';
         $ret['extConfig'] = 'KwcShop_Kwc_Shop_Cart_Plugins_Voucher_ExtConfig';
         $ret['menuConfig'] = 'KwcShop_Kwc_Shop_Cart_Plugins_Voucher_MenuConfig';
         return $ret;

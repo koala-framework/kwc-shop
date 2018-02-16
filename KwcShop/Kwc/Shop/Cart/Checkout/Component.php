@@ -26,7 +26,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Co
         $ret['menuConfig'] = 'KwcShop_Kwc_Shop_Cart_Checkout_MenuConfig';
 
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/OrdersPanel.js';
+        $ret['assetsAdmin']['files'][] = 'kwcShop/KwcShop/Kwc/Shop/Cart/Checkout/OrdersPanel.js';
 
         return $ret;
     }
