@@ -6,6 +6,7 @@ class KwcShop_Kwc_Shop_AddToCart_Component extends KwcShop_Kwc_Shop_AddToCartAbs
         $ret = parent::getSettings($param);
         $ret['orderProductData'] = 'KwcShop_Kwc_Shop_AddToCart_OrderProductData';
         $ret['productTypeText'] = trlKwfStatic('Product');
+        $ret['rootElementClass'] .= ' kwfUp-addToCartForm';
         return $ret;
     }
 
