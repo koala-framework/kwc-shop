@@ -7,7 +7,7 @@ class KwcShop_Kwc_Shop_Products_Directory_AddToCart_Component extends Kwc_Form_C
         //$ret['flags']['processInput'] = false;
         $ret['placeholder']['submitButton'] = trlKwfStatic('add to cart');
         $ret['generators']['child']['component']['success'] = 'KwcShop_Kwc_Shop_AddToCartAbstract_Success_Component';
-        $ret['rootElementClass'] .= ' kwfUp-addToCardForm';
+        $ret['rootElementClass'] .= ' kwfUp-addToCartForm';
         return $ret;
     }
 
