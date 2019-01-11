@@ -5,7 +5,7 @@ var $ = require('jQuery');
 onReady.onRender('.kwcClass',function(el) {
     var url = getKwcRenderUrl();
 
-    $.each($('.kwfUp-addToCardForm .kwfUp-formContainer'), $.proxy(function(index, form) {
+    $.each($('.kwfUp-addToCartForm .kwfUp-formContainer'), $.proxy(function(index, form) {
         $(form).on('kwfUp-form-submitSuccess', $.proxy(function(event) {
             $.ajax({
                 url: url,
