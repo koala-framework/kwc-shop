@@ -9,6 +9,7 @@ class KwcShop_Kwc_Shop_Products_Directory_Update_20150309Shop00004 extends Kwf_U
             $row->size = (int)$row->size_backup;
             $row->amount = (int)$row->amount_backup;
             $row->save();
+            Kwf_Model_Abstract::clearAllRows();
         }
     }
 }

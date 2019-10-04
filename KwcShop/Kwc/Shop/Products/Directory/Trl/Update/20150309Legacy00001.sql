@@ -1,4 +1,4 @@
-CREATE TABLE  `kwc_shop_products_trl` (
+CREATE TABLE  IF NOT EXISTS `kwc_shop_products_trl` (
 `component_id` VARCHAR(255) NOT NULL ,
 `title` VARCHAR( 200 ) NOT NULL ,
 `visible` TINYINT NOT NULL ,
