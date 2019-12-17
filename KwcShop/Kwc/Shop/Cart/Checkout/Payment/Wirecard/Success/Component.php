@@ -32,26 +32,23 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends 
 
     public function processInput($data)
     {
-        $custom = isset($data['custom']) ? rawurldecode($data['custom']) : null;
-        $data = KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::decodeCallback($custom);
-        if ($data) {
-            $db = Kwf_Registry::get('db');
+        Kwf_Exception_Abstract::$logErrors = true; //activate log always, because request comes from wirecard
+        ignore_user_abort(true);
 
-            $date = date('Y-m-d H:i:s');
-            $sql = "UPDATE `KwcShop_Kwc_Shop_orders` SET
-              `payment_component_id` = {$db->quote($this->getData()->parent->componentId)},
-              `checkout_component_id` = {$db->quote($this->getData()->parent->parent->componentId)},
-              `cart_component_class` = {$db->quote($this->getData()->parent->parent->parent->componentClass)},
-              `date` = {$db->quote($date)},
-              `status` = 'ordered'
-              WHERE `id` = {$db->quote($data['data']['orderId'])} AND (`status` = 'processing' OR `status` = 'cart')";
-            $db->query($sql);
+        if (!isset($_POST['response-base64']))
+            throw new Kwf_Exception_Client('Invalid request');
+        if (!$this->_isValidSignature($_POST['response-base64'], $_POST['response-signature-base64']))
+            throw new Kwf_Exception_Client('Response verification failed');
 
-            KwcShop_Kwc_Shop_Cart_Orders::setOverriddenCartOrderId($data['data']['orderId']);
-            if (KwcShop_Kwc_Shop_Cart_Orders::getCartOrderId() == $data['data']['orderId']) {
-                KwcShop_Kwc_Shop_Cart_Orders::resetCartOrderId();
-            }
-        }
+        $paymentResponse = json_decode(base64_decode($_POST['response-base64']), true);
+        $this->getData()->parent->getComponent()->processWirecardResponse($paymentResponse);
+    }
+
+    private function _isValidSignature($responseBase64, $signatureBase64)
+    {
+        $secret = Kwf_Config::getValue('wirecard.secret');
+        $signature = hash_hmac('sha256', $responseBase64, $secret, true);
+        return hash_equals($signature, base64_decode($signatureBase64));
     }
 
     public function getPlaceholders()

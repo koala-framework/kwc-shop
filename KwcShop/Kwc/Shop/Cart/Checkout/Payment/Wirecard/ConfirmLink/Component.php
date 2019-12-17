@@ -24,46 +24,23 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component exte
     }
 
     //used in trl
-    public static function buildWirecardButtonHtml($params, $payment, $order)
+    public static function buildWirecardButtonHtml($params, $payment, $order, $initUrl)
     {
-        $wirecardCustomerId = $payment->getBaseProperty('wirecard.customerId');
-        $wirecardSecret = $payment->getBaseProperty('wirecard.secret');
-        if (!$wirecardCustomerId || !$wirecardSecret) {
-            throw new Kwf_Exception('Set wirecard settings (customerId & secret) in config!');
-        }
-
         $params = array(
-            'secret' => $wirecardSecret,
-            'customerId' => $wirecardCustomerId,
             'amount' => $params['amount'],
             'currency' => $params['currency'],
             'language' => $payment->getLanguage(),
             'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), '.$payment->trlKwf('Order: {0}', $order->number),
+            'firstname' => $order->firstname,
+            'lastname' => $order->lastname,
             'displayText' => $payment->trlKwf('Thank you very much for your order.'),
-            'successURL' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
-            'confirmURL' => $payment->getChildComponent('_ipn')->getAbsoluteUrl(),
-            'serviceURL' => $payment->getSubroot()->getAbsoluteUrl(),
-            'failureURL' => $payment->getChildComponent('_failure')->getAbsoluteUrl(),
-            'cancelURL' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),
-            'requestFingerprintOrder' => '',
+            'successRedirectUrl' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
+            'failRedirectUrl' => $payment->getChildComponent('_failure')->getAbsoluteUrl(),
+            'cancelRedirectUrl' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),
             'paymentType' => $params['paymentType'],
-            'custom' => $params['custom'],
+            'orderId' => $params['orderId'],
         );
-        if ($shopId = $payment->getBaseProperty('wirecard.shopId')) $params['shopId'] = $shopId;
-
-        $requestFingerprintSeed  = "";
-        $exclude = array('requestFingerprintOrder');
-        foreach ($params as $key=>$value) {
-            if (in_array($key, $exclude)) continue;
-            $params['requestFingerprintOrder'] .= "$key,";
-            $requestFingerprintSeed  .= $value;
-        }
-        $params['requestFingerprintOrder'] .= "requestFingerprintOrder";
-        $requestFingerprintSeed  .= $params['requestFingerprintOrder'];
-        $params['requestFingerprint'] = md5($requestFingerprintSeed);
-
-        $initURL = "https://checkout.wirecard.com/page/init.php";
-        $ret = "<form action=\"$initURL\" method=\"post\" name=\"form\">\n";
+        $ret = "<form action=\"$initUrl\" method=\"post\" name=\"form\">\n";
         foreach ($params as $k=>$i) {
         if ($k == 'secret') continue;
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".Kwf_Util_HtmlSpecialChars::filter($i)."\">\n";
@@ -85,16 +62,15 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component exte
 
         $payment = $this->getData()->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component');
 
-        $custom = KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::getEncodedCallback(
-            $payment->componentId, array('orderId' => $order->id)
-        );
         $params = array(
             'amount' => round($total, 2),
             'currency' => 'EUR',
             'paymentType' => Kwc_Abstract::getSetting($payment->componentClass, 'paymentType'),
-            'custom' => $custom
+            'orderId' => $order->id
         );
+        $initUrl =  Kwc_Admin::getInstance($this->getData()->componentClass)
+                ->getControllerUrl() . '/json-initiate-payment';
 
-        return self::buildWirecardButtonHtml($params, $payment, $order);
+        return self::buildWirecardButtonHtml($params, $payment, $order, $initUrl);
     }
 }

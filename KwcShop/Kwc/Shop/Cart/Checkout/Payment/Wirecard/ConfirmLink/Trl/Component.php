@@ -26,18 +26,17 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Trl_Component 
 
         $payment = $this->getData()->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Trl_Component');
 
-        $custom = KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::getEncodedCallback(
-            $payment->componentId, array('orderId' => $order->id)
-        );
-
         $params = array(
             'amount' => round($total, 2),
             'currency' => 'EUR',
             'paymentType' => Kwc_Abstract::getSetting($payment->chained->componentClass, 'paymentType'),
-            'custom' => $custom
+            'orderId' => $order->id
         );
 
-        return KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component::buildWirecardButtonHtml($params, $payment, $order);
+        $initUrl =  Kwc_Admin::getInstance($this->getData()->componentClass)
+                ->getControllerUrl() . '/json-initiate-payment';
+
+        return KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component::buildWirecardButtonHtml($params, $payment, $order, $initUrl);
     }
 }
 
