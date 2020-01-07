@@ -11,11 +11,11 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component exte
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
+        $controllerBaseUrl = Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl();
         $ret['wirecardButton'] = $this->_getWirecardButton();
         $ret['options'] = array(
-            'controllerUrl' =>
-                Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl() .
-                '/json-confirm-order',
+            'confirmOrderUrl' => "$controllerBaseUrl/json-confirm-order",
+            'initiatePaymentUrl' => "$controllerBaseUrl/json-initiate-payment",
             'params' => array(
                 'paymentComponentId' => $this->getData()->parent->componentId
             )

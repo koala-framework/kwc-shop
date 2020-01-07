@@ -66,14 +66,13 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Controller ext
             $response = $client->request('POST');
             if ($response->isSuccessful()) {
                 $body = json_decode($response->getBody(), true);
-                header("Location: {$body['payment-redirect-url']}"); // redirect to wirecard checkout
-                exit;
+                $this->view->redirectUrl = $body['payment-redirect-url'];
             } else {
-                $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns.');
+                $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte probieren sie es nach einer Weile erneut.');
                 $this->view->success = false;
             }
         } catch (Exception $e) {
-            $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns.');
+            $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte probieren sie es nach einer Weile erneut.');
             $this->view->success = false;
         }
     }
