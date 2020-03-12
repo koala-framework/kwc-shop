@@ -18,7 +18,7 @@
             <?php foreach ($item->additionalOrderData as $d) { ?>
                 <td class="<?=$d['class']?>"><?=Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($d['name']));?>: <?=Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($d['value']));?></td>
             <?php } ?>
-            <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=Kwf_Util_HtmlSpecialChars::filter($this->money($item->price));?></td>
+            <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=Kwf_Util_HtmlSpecialChars::filter(strip_tags($this->money($item->price)));?></td>
         </tr>
         <?php $c++;
     } ?>
@@ -40,12 +40,12 @@
             </td>
             <td width="120" align="right">
                 <?php
-                    if (isset($row['class']) && $row['class']=='valueOfGoods') {
-                        echo '<i>'.Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],'')).'</i>';
-                    } else if (isset($row['class']) && $row['class']=='totalAmount') {
-                        echo '<b>'.Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],'')).'</b>';
+                    if (isset($row['class']) && $row['class'] == 'valueOfGoods') {
+                        echo '<i>' . Kwf_Util_HtmlSpecialChars::filter(strip_tags($this->money($row['amount'], ''))) . '</i>';
+                    } else if (isset($row['class']) && $row['class'] == 'totalAmount') {
+                        echo '<b>' . Kwf_Util_HtmlSpecialChars::filter(strip_tags($this->money($row['amount'], ''))) . '</b>';
                     } else {
-                        echo Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],''));
+                        echo Kwf_Util_HtmlSpecialChars::filter(strip_tags($this->money($row['amount'], '')));
                     }
                 ?>
             </td>
