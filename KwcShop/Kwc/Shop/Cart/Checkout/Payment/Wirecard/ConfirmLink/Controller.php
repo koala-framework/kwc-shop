@@ -21,4 +21,92 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Controller ext
             $session->wirecardCartId = $order->id;
         }
     }
+
+    public function jsonInitiatePaymentAction()
+    {
+        $wirecardUrl = Kwf_Config::getValue('wirecard.url');
+        $wirecardMerchantId = Kwf_Config::getValue('wirecard.merchant.id');
+        $wirecardUsername = Kwf_Config::getValue('wirecard.auth.username');
+        $wirecardPassword = Kwf_Config::getValue('wirecard.auth.password');
+
+        if (!$wirecardUrl || !$wirecardMerchantId || !$wirecardUsername || !$wirecardPassword) {
+            throw new Kwf_Exception_Client('Set wirecard settings in config. (wirecard.url, wirecard.merchant.id, wirecard.auth.username, wirecard.auth.password)');
+        }
+
+        $client = new Zend_Http_Client($wirecardUrl);
+        $client->setHeaders(array(
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ));
+        $client->setAuth($wirecardUsername, $wirecardPassword, \Zend_Http_Client::AUTH_BASIC);
+        $postData = array(
+            'payment' => array_merge(array(
+                'merchant-account-id' => array(
+                    'value' => $wirecardMerchantId
+                ),
+                'account-holder' => array(
+                    'first-name' => $this->getParam('firstname'),
+                    'last-name' => $this->getParam('lastname'),
+                ),
+                'locale' => $this->getParam('language'),
+                'request-id' => $this->getParam('orderId'),
+                'requested-amount' => array(
+                    'value' => floatval($this->getParam('amount')),
+                    'currency' => $this->getParam('currency')
+                ),
+                'success-redirect-url' => $this->getParam('successRedirectUrl'),
+                'fail-redirect-url' => $this->getParam('failRedirectUrl'),
+                'cancel-redirect-url' => $this->getParam('cancelRedirectUrl'),
+                'descriptor' => trl("Bestellung Nr. {$this->getParam('orderId')}") // text for bank statement (sofort)
+            ),
+            $this->_getPaymentTypeData($this->getParam('paymentType')))
+        );
+        $client->setRawData(json_encode($postData));
+        try {
+            $response = $client->request('POST');
+            if ($response->isSuccessful()) {
+                $body = json_decode($response->getBody(), true);
+                $this->view->redirectUrl = $body['payment-redirect-url'];
+            } else {
+                $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte probieren sie es nach einer Weile erneut.');
+                $this->view->success = false;
+            }
+        } catch (Exception $e) {
+            $this->view->errorMessage = trl('Bei der Bezahlung ist ein Fehler aufgetreten. Bitte probieren sie es nach einer Weile erneut.');
+            $this->view->success = false;
+        }
+    }
+
+    private function _getPaymentTypeData($paymentType)
+    {
+        switch ($paymentType) {
+            case 'creditcard':
+            case 'paybox':
+                $transactionType = 'purchase';
+                break;
+            case 'alipay-xborder':
+            case 'bancontact':
+            case 'eps':
+            case 'ideal':
+            case 'paydirekt':
+            case 'paylib':
+            case 'paypal':
+            case 'paysafecard':
+            case 'p24':
+            case 'sepadirectdebit':
+            case 'sofortbanking':
+                $transactionType = 'debit';
+                break;
+        }
+        return array(
+            'transaction-type' => $transactionType,
+            'payment-methods' => array(
+                'payment-method' => array(
+                    array(
+                        'name' => $paymentType
+                    )
+                )
+            ),
+        );
+    }
 }
