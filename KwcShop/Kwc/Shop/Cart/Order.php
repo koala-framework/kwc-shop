@@ -200,7 +200,7 @@ class KwcShop_Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
     {
         $ret = array();
         $m = new Kwf_View_Helper_Money();
-        $ret['total'] = $m->money($this->getTotal());
+        $ret['total'] = strip_tags($m->money($this->getTotal()));
         $ret['orderNumber'] = $this->order_number;
 
         $plugins = $this->getModel()->getShopCartPlugins();
