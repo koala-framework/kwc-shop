@@ -2,16 +2,9 @@
 Shop Component for Koala Framework
 
 #### Wirecard credentials
-Several types of payment methods can be configured. Each payment method has its own individual test credentials, which need to be set correctly for each payment method to work properly in a test environment. Some payment methods are shown below but other configurations can be found at: https://doc.wirecard.com/PPv2.html#PPv2_PaymentMethods
+Several types of payment methods can be configured. Each payment method has its own individual test credentials, which need to be set correctly for each payment method to work properly in a test environment. Some payment methods are shown below but other configurations can be found at: https://doc.wirecard.com/CC_Main.html#PPv2_CC_3DSecure
 ```
 [test]
-;creditcard
-wirecard.url = https://wpp-test.wirecard.com/api/payment/register
-wirecard.merchant.id = 7a6dd74f-06ab-4f3f-a864-adc52687270a
-wirecard.secret = a8c3fce6-8df7-4fd6-a1fd-62fa229c5e55
-wirecard.auth.username = "70000-APIDEMO-CARD"
-wirecard.auth.password = "ohysS0-dvfMx"
-
 ;creditcard with 3d-secure enabled
 wirecard.url = https://wpp-test.wirecard.com/api/payment/register
 wirecard.merchant.id = cad16b4a-abf2-450d-bcb8-1725a4cef443

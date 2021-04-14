@@ -41,12 +41,22 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Controller ext
         $client->setAuth($wirecardUsername, $wirecardPassword, \Zend_Http_Client::AUTH_BASIC);
         $postData = array(
             'payment' => array_merge(array(
+                'card' => array(
+                    'merchant-tokenization-flag' => true,
+                ),
                 'merchant-account-id' => array(
                     'value' => $wirecardMerchantId
                 ),
                 'account-holder' => array(
                     'first-name' => $this->getParam('firstname'),
                     'last-name' => $this->getParam('lastname'),
+                    'email' => $this->getParam('email'),
+                    'address' => array(
+                        'street1' => $this->getParam('street1'),
+                        'postal-code' => $this->getParam('zip'),
+                        'city' => $this->getParam('city'),
+                        'country' => $this->getParam('country'),
+                    )
                 ),
                 'locale' => $this->getParam('language'),
                 'request-id' => $this->getParam('orderId'),
