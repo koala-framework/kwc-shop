@@ -1,5 +1,5 @@
 <?php
-class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Editable_Component
+class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Success_Component extends Kwc_Editable_Component
 {
     public static function getSettings($param = null)
     {
@@ -32,23 +32,33 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends 
 
     public function processInput($data)
     {
-        Kwf_Exception_Abstract::$logErrors = true; //activate log always, because request comes from wirecard
+        Kwf_Exception_Abstract::$logErrors = true; //activate log always, because request comes from qenta
         ignore_user_abort(true);
 
-        if (!isset($_POST['response-base64']))
-            throw new Kwf_Exception_Client('Invalid request');
-        if (!$this->_isValidSignature($_POST['response-base64'], $_POST['response-signature-base64']))
-            throw new Kwf_Exception_Client('Response verification failed');
+        if (!isset($data['orderNumber'])) {
+            $home = $this->getData()->getSubroot()->getAbsoluteUrl();
+            header("Location: $home");
+            exit;
+        }
 
-        $paymentResponse = json_decode(base64_decode($_POST['response-base64']), true);
-        $this->getData()->parent->getComponent()->processWirecardResponse($paymentResponse);
+        if (!$this->_isValidResponse($data)) {
+            throw new Kwf_Exception_Client(trlKwf('An invalid response was sent.'));
+        }
+        $this->getData()->parent->getComponent()->processQentaResponse($data);
     }
 
-    private function _isValidSignature($responseBase64, $signatureBase64)
+    private function _isValidResponse($response)
     {
-        $secret = Kwf_Config::getValue('wirecard.secret');
-        $signature = hash_hmac('sha256', $responseBase64, $secret, true);
-        return hash_equals($signature, base64_decode($signatureBase64));
+        $secret = Kwf_Config::getValue('qenta.secret');
+        $string = '';
+        foreach ($response as $key => $value) {
+            if ($key == 'responseFingerprint') continue;
+            if ($key == 'responseFingerprintOrder') {
+                $string .= $secret;
+            }
+            $string .= "{$value}";
+        }
+        return $response['responseFingerprint'] == hash_hmac('sha512', $string, $secret);
     }
 
     public function getPlaceholders()

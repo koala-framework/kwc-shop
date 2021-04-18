@@ -1,5 +1,5 @@
 <?php
-class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Trl_Component extends Kwc_Chained_Trl_Component
+class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
@@ -24,7 +24,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Trl_Component 
         $total = $this->getData()->chained->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Component')
             ->getComponent()->getTotal($order);
 
-        $payment = $this->getData()->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Trl_Component');
+        $payment = $this->getData()->getParentByClass('KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Trl_Component');
 
         $params = array(
             'amount' => round($total, 2),
@@ -33,10 +33,9 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Trl_Component 
             'orderId' => $order->id
         );
 
-        $initUrl =  Kwc_Admin::getInstance($this->getData()->componentClass)
-                ->getControllerUrl() . '/json-initiate-payment';
+        $paymentUrl = Kwf_Config::getValue('qenta.url');
 
-        return KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component::buildWirecardButtonHtml($params, $payment, $order, $initUrl);
+        return KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component::buildWirecardButtonHtml($params, $payment, $order, $initUrl);
     }
 }
 

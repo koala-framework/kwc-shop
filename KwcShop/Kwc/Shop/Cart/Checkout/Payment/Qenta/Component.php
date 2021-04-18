@@ -2,30 +2,30 @@
 /**
  * set preLoginIgnore for wirecard confirm url in config: preLoginIgnore.wirecardConfirm = url
  **/
-class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends KwcShop_Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
+class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Component extends KwcShop_Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
-        $ret['componentName'] = trlKwfStatic('Wirecard');
-        // Delete confirm because of wirecard dispatch confirm url
+        $ret['componentName'] = trlKwfStatic('QENTA');
+        // Delete confirm because of qenta dispatch confirm url
         unset($ret['generators']['confirm']);
-        $ret['generators']['child']['component']['confirmLink'] = 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component';
+        $ret['generators']['child']['component']['confirmLink'] = 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component';
         $ret['generators']['cancel'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Cancel_Component',
+            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Cancel_Component',
             'name' => trlKwfStatic('Cancel')
         );
 
         $ret['generators']['failure'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Failure_Component',
+            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Failure_Component',
             'name' => trlKwfStatic('Failure')
         );
 
         $ret['generators']['success'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component',
+            'component' => 'KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Success_Component',
             'name' => trlKwfStatic('Success')
         );
 
@@ -38,18 +38,17 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends KwcShop_
         return $ret;
     }
 
-    public function processWirecardResponse($wirecardResponse)
+    public function processQentaResponse($qentaResponse)
     {
-        $paymentState = isset($wirecardResponse['payment']['transaction-state']) ? $wirecardResponse['payment']['transaction-state'] : null;
-        if ($paymentState == 'failed') {
+        $paymentState = isset($qentaResponse['paymentState']) ? $qentaResponse['paymentState'] : null;
+        if ($paymentState == 'FAILURE') {
             $message = trl('Transaktion ist fehlgeschlagen.');
-            $message .= ' ' . $paymentResponse['statuses']['status'][0]['description']; // take latest error message
-            $e = new Kwf_Exception('Wirecard Transaction Failed: '.$message);
+            $message .= ' ' . $qentaResponse['avsResponseMessage'];
+            $e = new Kwf_Exception('QENTA Transaction Failed: '.$message);
             $e->log();
-        } else if ($paymentState == 'success') {
-            $orderId = $wirecardResponse['payment']['request-id'];
+        } else if ($paymentState == 'SUCCESS') {
             $orderRow = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->componentClass, 'childModel'))
-                ->getReferencedModel('Order')->getRow($orderId);
+                ->getReferencedModel('Order')->getRow($qentaResponse['babytuch_orderId']);
 
             if (!$orderRow) {
                 throw new Kwf_Exception("Order not found");
@@ -77,8 +76,8 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends KwcShop_
                 $orderRow->confirm_mail_sent = date('Y-m-d H:i:s');
             }
             $orderRow->save();
-            KwcShop_Kwc_Shop_Cart_Orders::setOverriddenCartOrderId($orderId);
-            if (KwcShop_Kwc_Shop_Cart_Orders::getCartOrderId() == $orderId) {
+            KwcShop_Kwc_Shop_Cart_Orders::setOverriddenCartOrderId($orderRow->id);
+            if (KwcShop_Kwc_Shop_Cart_Orders::getCartOrderId() == $orderRow->id) {
                 KwcShop_Kwc_Shop_Cart_Orders::resetCartOrderId();
             }
             return true;
