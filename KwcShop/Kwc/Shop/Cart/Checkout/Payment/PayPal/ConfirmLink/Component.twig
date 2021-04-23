@@ -1,0 +1,6 @@
+<div class="{{ rootElementClass }}" data-options="{{ options|json_encode }}">
+    <input type="hidden" value="{{ options|json_encode }}">
+    {{ paypalButton|raw }}
+    <div class="{{ 'process'|bemClass }}"></div>
+    <div class="{{ 'error'|bemClass }}"></div>
+</div>
