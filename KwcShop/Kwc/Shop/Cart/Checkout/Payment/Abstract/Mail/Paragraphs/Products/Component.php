@@ -17,6 +17,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_C
             $order = $renderer->getRecipient();
             $ret['items'] = $order->getProductsData();
             foreach ($ret['items'] as &$r) {
+                if (!isset($r->additionalOrderData[0])) continue; // vouchers don't have additionalOrderData
                 $r->additionalOrderData[0]['name'] = $this->getData()->trlStaticExecute($r->additionalOrderData[0]['name']);
             }
 

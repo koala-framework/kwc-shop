@@ -9,7 +9,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Kw
             $db = Kwf_Registry::get('db');
 
             $date = date('Y-m-d H:i:s');
-            $sql = "UPDATE `KwcShop_Kwc_Shop_orders` SET
+            $sql = "UPDATE `kwc_shop_orders` SET
               `payment_component_id` = {$db->quote($this->getData()->parent->componentId)},
               `checkout_component_id` = {$db->quote($this->getData()->parent->parent->componentId)},
               `cart_component_class` = {$db->quote($this->getData()->parent->parent->parent->componentClass)},
