@@ -10,7 +10,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_PayPal_Cancel_ContentSender extends
                 ->getReferencedModel('Order')->getCartOrder();
             $db = Kwf_Registry::get('db');
             $db->query(
-                "UPDATE `KwcShop_Kwc_Shop_orders` SET `status` = 'cart' WHERE `id` = {$db->quote($order->id)} AND `status` = 'processing'"
+                "UPDATE `kwc_shop_orders` SET `status` = 'cart' WHERE `id` = {$db->quote($order->id)} AND `status` = 'processing'"
             );
             unset($session->paypalCartId);
         }
