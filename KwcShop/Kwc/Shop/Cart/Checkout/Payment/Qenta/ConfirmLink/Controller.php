@@ -19,6 +19,22 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Controller extend
             $order->save();
             $session = new Kwf_Session_Namespace('kwcShopCart');
             $session->qentaCartId = $order->id;
+
+            $confirmLinkCmp = $component->getChildComponent('-confirmLink');
+            $total = $component->parent->getComponent()->getTotal($order);
+            $params = array(
+                'amount' => round($total, 2),
+                'currency' => 'EUR',
+                'paymentType' => Kwc_Abstract::getSetting($component->componentClass, 'paymentType'),
+                'orderId' => $order->id
+            );
+            $this->view->formHtml = call_user_func(array($confirmLinkCmp->componentClass, 'buildWirecardButtonHtml'),
+                $params,
+                $component,
+                $order,
+                Kwf_Config::getValue('qenta.url')
+            );
         }
     }
+
 }
