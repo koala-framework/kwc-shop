@@ -12,10 +12,8 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component extends
     {
         $ret = parent::getTemplateVars($renderer);
         $controllerBaseUrl = Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl();
-        $ret['wirecardButton'] = $this->_getWirecardButton();
         $ret['options'] = array(
             'confirmOrderUrl' => "$controllerBaseUrl/json-confirm-order",
-            'initiatePaymentUrl' => "$controllerBaseUrl/json-initiate-payment",
             'params' => array(
                 'paymentComponentId' => $this->getData()->parent->componentId
             )
@@ -37,8 +35,8 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component extends
             'consumerBillingZipCode' => $order->zip,
             'consumerChallengeIndicator' => '04',
             'merchantTokenizationFlag' => 'true',
-            'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . ') '.$payment->trlKwf('Order: {0}', $order->number),
-            'customerStatement' => trl("Bestellung Nr. {$order->number}"), // bank statement
+            'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . ') '.$payment->trlKwf('Order: {0}', $order->order_number),
+            'customerStatement' => $payment->trlKwf('Order: {0}', $order->order_number), // bank statement
             'duplicateRequestCheck' => 'no',
             'successUrl' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
             'cancelUrl' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),
@@ -59,7 +57,6 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component extends
             if ($k == 'secret') continue;
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".Kwf_Util_HtmlSpecialChars::filter($i)."\">\n";
         }
-        $ret .= "<input type=\"submit\" value=\"{$payment->trlKwf('Buy now')}\" class=\"submit\">\n";
         $ret .= "</form>\n";
         return $ret;
 
