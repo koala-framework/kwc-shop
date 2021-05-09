@@ -4,10 +4,13 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Cancel_ContentSender extends 
     public function sendContent($includeMaster)
     {
         $session = new Kwf_Session_Namespace('kwcShopCart');
-        if (!$orderId = $session->qentaCartId && isset($_POST['babytuch_orderId'])) {
+        if ($session->qentaCartId) {
+            $orderId = $session->qentaCartId;
+        } else if (isset($_POST['babytuch_orderId'])) {
             $orderId = $_POST['babytuch_orderId'];
         }
-        if ($orderId) {
+
+        if (isset($orderId)) {
             KwcShop_Kwc_Shop_Cart_Orders::setCartOrderId($orderId);
             $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_data->parent->parent->parent->componentClass, 'childModel'))
                 ->getReferencedModel('Order')->getCartOrder();
