@@ -47,7 +47,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_ConfirmLink_Component extends
             'currency' => $params['currency'],
             'paymentType' => $params['paymentType'],
             'orderReference' => $params['orderId'],
-            'babytuch_orderId' => $order->id
+            'kwcShop_orderId' => $order->id
         );
         $postData['requestFingerprintOrder'] = self::_getRequestFingerprintOrder($postData);
         $postData['requestFingerprint'] = self::_getRequestFingerprint($postData, Kwf_Config::getValue('qenta.secret'));

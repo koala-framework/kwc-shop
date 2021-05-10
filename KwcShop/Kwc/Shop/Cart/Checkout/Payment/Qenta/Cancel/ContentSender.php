@@ -6,8 +6,8 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Cancel_ContentSender extends 
         $session = new Kwf_Session_Namespace('kwcShopCart');
         if ($session->qentaCartId) {
             $orderId = $session->qentaCartId;
-        } else if (isset($_POST['babytuch_orderId'])) {
-            $orderId = $_POST['babytuch_orderId'];
+        } else if (isset($_POST['kwcShop_orderId'])) {
+            $orderId = $_POST['kwcShop_orderId'];
         }
 
         if (isset($orderId)) {
