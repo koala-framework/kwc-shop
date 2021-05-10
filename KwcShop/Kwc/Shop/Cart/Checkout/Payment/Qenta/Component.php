@@ -48,7 +48,7 @@ class KwcShop_Kwc_Shop_Cart_Checkout_Payment_Qenta_Component extends KwcShop_Kwc
             $e->log();
         } else if ($paymentState == 'SUCCESS') {
             $orderRow = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->componentClass, 'childModel'))
-                ->getReferencedModel('Order')->getRow($qentaResponse['babytuch_orderId']);
+                ->getReferencedModel('Order')->getRow($qentaResponse['kwcShop_orderId']);
 
             if (!$orderRow) {
                 throw new Kwf_Exception("Order not found");
