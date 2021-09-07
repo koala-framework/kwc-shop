@@ -8,6 +8,11 @@ onReady.onRender('.kwcClass', function(el) {
         var config = el.data('options');
         $.post(config.confirmOrderUrl, config.params)
             .done(function (response) {
+                if (!response.success) {
+                    buyNowButton.hide();
+                    el.find('.kwcBem__error').text(response.message);
+                    return;
+                }
                 buyNowButton.append(response.formHtml);
                 buyNowButton.find('form').submit();
            });
